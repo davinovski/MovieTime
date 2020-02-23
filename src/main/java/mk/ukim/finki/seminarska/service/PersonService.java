@@ -11,6 +11,6 @@ public interface PersonService {
     void deletePerson(int personId);
     Person addPerson(Person person);
     List<Person> getAll();
-    Person updatePerson(int personId, String name, String bio, Date date, String placeOfBirth);
+    Person updatePerson(int personId, String name, String bio, Date date, String placeOfBirth, String imageUrl);
     Page<Person> getPeopleByPage(int page, int size);
 }

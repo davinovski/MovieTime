@@ -19,6 +19,9 @@ public class Movie {
     private int yearOfRelease;
     private String description;
     private float rating;
+    private String imageUrl;
+    private String country;
+    private int movieLength;
     @ElementCollection(targetClass=String.class)
     private List<String> genres;
     @ManyToMany
@@ -27,11 +30,15 @@ public class Movie {
     @ManyToMany
     private List<Person> stars;
 
-    @ManyToOne
-    private Person writer;
+    @ManyToMany
+    private List<Person> writers;
 
     @OneToMany
     private List<Comment> comments;
+
+    private String videoUrl;
+
+    private String detailsUrl;
 
     public Movie(){
         directors=new ArrayList<>();
@@ -40,7 +47,7 @@ public class Movie {
         genres=new ArrayList<>();
     }
 
-    public Movie(String title, int yearOfRelease, String description, float rating, List<String> genres, List<Person> directors, List<Person> stars, Person writer, List<Comment> comments) {
+    public Movie(String title, int yearOfRelease, String description, float rating, List<String> genres, List<Person> directors, List<Person> stars, List<Person> writers, List<Comment> comments, String country, String imageUrl, int movieLength, String videoUrl, String detailsUrl) {
         this.title = title;
         this.yearOfRelease = yearOfRelease;
         this.description = description;
@@ -48,9 +55,55 @@ public class Movie {
         this.genres = genres;
         this.directors = directors;
         this.stars = stars;
-        this.writer = writer;
+        this.writers = writers;
         this.comments = comments;
+        this.country=country;
+        this.movieLength=movieLength;
+        this.imageUrl=imageUrl;
+        this.videoUrl=videoUrl;
+        this.detailsUrl=detailsUrl;
     }
+
+    public String getDetailsUrl() {
+        return detailsUrl;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public void setDetailsUrl(String detailsUrl) {
+        this.detailsUrl = detailsUrl;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public int getMovieLength() {
+        return movieLength;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setMovieLength(int movieLength) {
+        this.movieLength = movieLength;
+    }
+
 
     public String getTitle() {
         return title;
@@ -108,12 +161,12 @@ public class Movie {
         this.stars = stars;
     }
 
-    public Person getWriter() {
-        return writer;
+    public List<Person> getWriters() {
+        return writers;
     }
 
-    public void setWriter(Person writer) {
-        this.writer = writer;
+    public void setWriters(List<Person> writers) {
+        this.writers = writers;
     }
 
     public List<Comment> getComments() {

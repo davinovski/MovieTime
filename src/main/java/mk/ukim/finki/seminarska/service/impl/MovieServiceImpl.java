@@ -41,7 +41,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie updateMovie(int movieId,String title,int yearOfRelease,String description,float rating,List<String> genres,List<Person> dirs,List<Person>starring, Person movieWriter,List<Comment> comments) {
+        public Movie updateMovie(int movieId,String title,int yearOfRelease,String description,float rating,List<String> genres,List<Person> dirs,List<Person>starring, List<Person> movieWriters,List<Comment> comments, String country, String imageUrl, int runtime, String videoUrl, String detailsUrl) {
         Movie movie=this.movieRepository.findById(movieId).orElseThrow(InvalidMovieIdException::new);
         movie.setTitle(title);
         movie.setGenres(genres);
@@ -50,8 +50,13 @@ public class MovieServiceImpl implements MovieService {
         movie.setDirectors(dirs);
         movie.setRating(rating);
         movie.setStars(starring);
-        movie.setWriter(movieWriter);
+        movie.setWriters(movieWriters);
         movie.setYearOfRelease(yearOfRelease);
+        movie.setCountry(country);
+        movie.setMovieLength(runtime);
+        movie.setImageUrl(imageUrl);
+        movie.setVideoUrl(videoUrl);
+        movie.setDetailsUrl(detailsUrl);
         return this.movieRepository.save(movie);
     }
 

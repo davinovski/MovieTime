@@ -40,12 +40,13 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person updatePerson(int personId, String name, String bio, Date date, String placeOfBirth) {
+    public Person updatePerson(int personId, String name, String bio, Date date, String placeOfBirth, String imageUrl) {
         Person person=this.personRepository.findById(personId).orElseThrow(InvalidPersonIdException::new);
         person.setBio(bio);
         person.setDateOfBirth(date);
         person.setName(name);
         person.setPlaceOfBirth(placeOfBirth);
+        person.setImageUrl(imageUrl);
         return this.personRepository.save(person);
     }
 

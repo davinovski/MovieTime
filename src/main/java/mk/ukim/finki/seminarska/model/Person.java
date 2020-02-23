@@ -19,12 +19,14 @@ public class Person {
     private String bio;
     private Date dateOfBirth;
     private String placeOfBirth;
+    private String imageUrl;
 
-    public Person(String name, String bio, Date dateOfBirth, String placeOfBirth) {
+    public Person(String name, String bio, Date dateOfBirth, String placeOfBirth, String imageUrl) {
         this.name = name;
         this.bio = bio;
         this.dateOfBirth = dateOfBirth;
         this.placeOfBirth = placeOfBirth;
+        this.imageUrl = imageUrl;
     }
 
     public int getId() {
@@ -57,6 +59,14 @@ public class Person {
 
     public String getPlaceOfBirth() {
         return placeOfBirth;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public void setPlaceOfBirth(String placeOfBirth) {
