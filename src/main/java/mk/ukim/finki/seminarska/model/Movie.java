@@ -4,10 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mk.ukim.finki.seminarska.model.DTOs.MovieFilter;
+import org.thymeleaf.expression.Sets;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Movie {
@@ -24,6 +28,9 @@ public class Movie {
     private int movieLength;
     @ElementCollection(targetClass=String.class)
     private List<String> genres;
+
+    @ElementCollection(targetClass=String.class)
+    private List<String> languages;
     @ManyToMany
     private List<Person> directors;
 
@@ -33,7 +40,7 @@ public class Movie {
     @ManyToMany
     private List<Person> writers;
 
-    @OneToMany
+    @OneToMany(mappedBy = "movieId")
     private List<Comment> comments;
 
     private String videoUrl;
@@ -47,7 +54,7 @@ public class Movie {
         genres=new ArrayList<>();
     }
 
-    public Movie(String title, int yearOfRelease, String description, float rating, List<String> genres, List<Person> directors, List<Person> stars, List<Person> writers, List<Comment> comments, String country, String imageUrl, int movieLength, String videoUrl, String detailsUrl) {
+    public Movie(String title, int yearOfRelease, String description, float rating, List<String> genres, List<Person> directors, List<Person> stars, List<Person> writers, List<Comment> comments, String country, String imageUrl, int movieLength, String videoUrl, String detailsUrl, List<String> languages) {
         this.title = title;
         this.yearOfRelease = yearOfRelease;
         this.description = description;
@@ -62,6 +69,7 @@ public class Movie {
         this.imageUrl=imageUrl;
         this.videoUrl=videoUrl;
         this.detailsUrl=detailsUrl;
+        this.languages=languages;
     }
 
     public String getDetailsUrl() {
@@ -180,5 +188,37 @@ public class Movie {
     public int getId() {
         return id;
     }
+
+    public List<String> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(List<String> languages) {
+        this.languages = languages;
+    }
+
+    public static List<Movie> filterMovies (List<Movie>movies, MovieFilter movieFilter, String sortedBy){
+        if(sortedBy==null){
+            sortedBy="title";
+        }
+        List<Movie> m=movies.stream().filter(movie -> movie.getGenres().stream().anyMatch(movieFilter.getGenres()::contains))
+                .collect(Collectors.toList());
+        switch(sortedBy){
+            case("title"):
+                m.sort(Comparator.comparing(Movie::getTitle));
+                break;
+            case("rating"):
+                m.sort(Comparator.comparingDouble(Movie::getRating).reversed());
+                break;
+            case("year"):
+                m.sort(Comparator.comparingInt(Movie::getYearOfRelease).reversed());
+                break;
+        }
+        return m;
+
+
+    }
+
+
 }
 

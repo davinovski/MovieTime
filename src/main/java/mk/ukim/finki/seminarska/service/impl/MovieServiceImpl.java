@@ -1,6 +1,7 @@
 package mk.ukim.finki.seminarska.service.impl;
 
 import mk.ukim.finki.seminarska.model.Comment;
+import mk.ukim.finki.seminarska.model.DTOs.MovieFilter;
 import mk.ukim.finki.seminarska.model.Movie;
 import mk.ukim.finki.seminarska.model.Person;
 import mk.ukim.finki.seminarska.model.exceptions.InvalidMovieIdException;
@@ -8,6 +9,7 @@ import mk.ukim.finki.seminarska.repository.MovieRepository;
 import mk.ukim.finki.seminarska.service.MovieService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +28,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> getAll() {
-        return this.movieRepository.findAll();
+    public List<Movie> getAll(MovieFilter movieFilter, String sortedBy) {
+        return Movie.filterMovies(this.movieRepository.findAll(),movieFilter,sortedBy);
     }
 
     @Override
@@ -41,7 +43,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-        public Movie updateMovie(int movieId,String title,int yearOfRelease,String description,float rating,List<String> genres,List<Person> dirs,List<Person>starring, List<Person> movieWriters,List<Comment> comments, String country, String imageUrl, int runtime, String videoUrl, String detailsUrl) {
+        public Movie updateMovie(int movieId,String title,int yearOfRelease,String description,float rating,List<String> genres,List<Person> dirs,List<Person>starring, List<Person> movieWriters,List<Comment> comments, String country, String imageUrl, int runtime, String videoUrl, String detailsUrl, List<String> languages) {
         Movie movie=this.movieRepository.findById(movieId).orElseThrow(InvalidMovieIdException::new);
         movie.setTitle(title);
         movie.setGenres(genres);
@@ -57,11 +59,14 @@ public class MovieServiceImpl implements MovieService {
         movie.setImageUrl(imageUrl);
         movie.setVideoUrl(videoUrl);
         movie.setDetailsUrl(detailsUrl);
+        movie.setLanguages(languages);
         return this.movieRepository.save(movie);
     }
 
     @Override
-    public Page<Movie> getAllMoviesByPage(int page, int size) {
-        return this.movieRepository.findAll(PageRequest.of(page,size));
+    public Page<Movie> getAllMoviesByPage(int page, int size, String sortedBy) {
+        return null;
     }
+
+
 }
