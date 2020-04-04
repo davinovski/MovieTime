@@ -41,7 +41,7 @@ public class MoviesApi {
         List<Person> writs=convertListIntegersToListElements(movieData.writers);
         List<Comment> comments=new ArrayList<>();
 
-        Movie movie=new Movie(movieData.title, movieData.year, movieData.description, 0, movieData.genres,dirs,starring,writs,comments, movieData.country, movieData.imageUrl, movieData.runtime, movieData.videoUrl, movieData.detailsUrl,movieData.languages);
+        Movie movie=new Movie(movieData.title, movieData.yearOfRelease, movieData.description, movieData.rating, movieData.genres, dirs, starring, writs, comments, movieData.country, movieData.imageUrl, movieData.movieLength, movieData.videoUrl, movieData.detailsUrl,movieData.languages);
         return this.movieService.addMovie(movie);
     }
 
@@ -59,35 +59,18 @@ public class MoviesApi {
     public Movie getMovie(@PathVariable int movieId){
         return this.movieService.getMovie(movieId);
     }
-    /*
+
+
     @PatchMapping("/{movieId}")
-    public Movie editMovie(
-            @PathVariable int movieId,
-            @RequestParam("title") String title,
-            @RequestParam("yearOfRelease") int yearOfRelease,
-            @RequestParam("description") String description,
-            @RequestParam("rating") float rating,
-            @RequestParam("genre") String[] genres,
-            @RequestParam("directors") int[] directors,
-            @RequestParam("stars") int[] stars,
-            @RequestParam("writer") int[] writers,
-            @RequestParam("country") String country,
-            @RequestParam("imageUrl") String imageUrl,
-            @RequestParam("movieLength") int movieLength,
-            @RequestParam("videoUrl") String videoUrl,
-            @RequestParam("detailsUrl") String detailsUrl,
-            @RequestParam("languages") String[] languages
-            )
+    public Movie editMovie(@PathVariable int movieId, @RequestBody RequestCreateMovie movieData)
     {
-        List<Person> dirs=convertListIntegersToListElements(directors);
-        List<Person>starring=convertListIntegersToListElements(stars);
-        List<String> gens = new ArrayList<>(Arrays.asList(genres));
-        List<String> langs = new ArrayList<>(Arrays.asList(languages));
-        List<Person> writs=convertListIntegersToListElements(writers);
+        List<Person> dirs=convertListIntegersToListElements(movieData.directors);
+        List<Person> starring=convertListIntegersToListElements(movieData.stars);
+
+        List<Person> writs=convertListIntegersToListElements(movieData.writers);
         List<Comment> comments=this.movieService.getMovie(movieId).getComments();
-        return this.movieService.updateMovie(movieId,title,yearOfRelease,description,rating,gens,dirs,starring,writs,comments,country,imageUrl,movieLength, videoUrl, detailsUrl, langs);
+        return this.movieService.updateMovie(movieId, movieData.title, movieData.yearOfRelease, movieData.description, movieData.rating, movieData.genres,dirs, starring, writs, comments, movieData.country, movieData.imageUrl, movieData.movieLength, movieData.videoUrl, movieData.detailsUrl,movieData.languages);
     }
-     */
 
     @DeleteMapping("/{movieId}")
     public void deleteMovie(@PathVariable int movieId){
@@ -98,9 +81,10 @@ public class MoviesApi {
     @ResponseStatus(code = HttpStatus.CREATED)
     public Comment addComment(@PathVariable("movieId") int movieId,
                               @RequestParam("title") String title,
-                              @RequestParam("content")  String content)
+                              @RequestParam("content") String content,
+                              @RequestParam("stars") float stars)
     {
-        return this.commentService.addComment(title,content,movieId);
+        return this.commentService.addComment(title,content, movieId, stars);
     }
 
     @GetMapping("/{movieId}/comments")

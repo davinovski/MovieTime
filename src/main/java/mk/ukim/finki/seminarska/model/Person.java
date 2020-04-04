@@ -8,7 +8,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 
-@NoArgsConstructor
 @Entity
 public class Person {
     @Id
@@ -27,6 +26,9 @@ public class Person {
         this.dateOfBirth = dateOfBirth;
         this.placeOfBirth = placeOfBirth;
         this.imageUrl = imageUrl;
+    }
+    public Person(){
+
     }
 
     public int getId() {

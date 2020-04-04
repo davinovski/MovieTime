@@ -21,9 +21,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment addComment(String title,String content, int movieId) {
+    public Comment addComment(String title,String content, int movieId, float stars) {
         Movie movie=movieRepository.findById(movieId).orElseThrow(InvalidMovieIdException::new);
-        Comment comment=new Comment(title,content,movie);
+        Comment comment=new Comment(title,content,movie, stars);
         return this.commentRepository.save(comment);
     }
 

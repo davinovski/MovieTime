@@ -6,11 +6,11 @@ import java.util.List;
 
 @Data
 public class RequestCreateMovie {
-    public int runtime;
+    public int movieLength;
     public String imageUrl;
     public String title;
     public String videoUrl;
-    public int year;
+    public int yearOfRelease;
     public String detailsUrl;
     public String description;
     public List<String> languages;
@@ -19,4 +19,5 @@ public class RequestCreateMovie {
     public List<Integer> directors;
     public List<Integer> stars;
     public List<String> genres;
+    public float rating;
 }

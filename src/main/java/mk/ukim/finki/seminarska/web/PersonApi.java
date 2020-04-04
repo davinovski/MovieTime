@@ -1,6 +1,7 @@
 package mk.ukim.finki.seminarska.web;
 
 
+import mk.ukim.finki.seminarska.model.DTOs.PersonRequest;
 import mk.ukim.finki.seminarska.model.Person;
 import mk.ukim.finki.seminarska.service.PersonService;
 import org.springframework.http.HttpStatus;
@@ -31,30 +32,18 @@ public class PersonApi {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Person addPerson(
-            @RequestParam("name") String name,
-            @RequestParam("bio") String bio,
-            @RequestParam("dateOfBirth") String dateOfBirth,
-            @RequestParam("placeOfBirth") String placeOfBirth,
-            @RequestParam("imageUrl") String imageUrl)
+    public Person addPerson(@RequestBody PersonRequest personRequest)
     {
-        Date date=new Date();
-        Person person=new Person(name,bio,date,placeOfBirth,imageUrl);
+        Person person=new Person(personRequest.name,personRequest.bio,personRequest.dateOfBirth,personRequest.placeOfBirth,personRequest.imageUrl);
         return this.personService.addPerson(person);
-
     }
 
     @PutMapping("/{personId}")
     public Person updatePerson(
             @PathVariable("personId") int personId,
-            @RequestParam("name") String name,
-            @RequestParam("bio") String bio,
-            @RequestParam("dateOfBirth") String dateOfBirth,
-            @RequestParam("placeOfBirth") String placeOfBirth,
-            @RequestParam("imageUrl") String imageUrl)
+            @RequestBody PersonRequest personRequest)
 
     {
-        Date date=new Date();
-        return this.personService.updatePerson(personId,name,bio,date,placeOfBirth, imageUrl);
+        return this.personService.updatePerson(personId,personRequest.name,personRequest.bio,personRequest.dateOfBirth,personRequest.placeOfBirth,personRequest.imageUrl);
     }
 }

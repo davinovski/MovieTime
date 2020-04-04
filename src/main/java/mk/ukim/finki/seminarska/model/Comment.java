@@ -23,12 +23,15 @@ public class Comment {
     @JoinColumn(name="movie_id")
     private Movie movieId;
 
+    private float stars;
 
-    public Comment(String title,String content, Movie movieId) {
+
+    public Comment(String title,String content, Movie movieId, float stars) {
         this.title=title;
         this.content = content;
         this.movieId=movieId;
         this.createdAd = LocalDateTime.now();
+        this.stars=stars;
     }
 
     public int getId() {
@@ -48,4 +51,7 @@ public class Comment {
         return content;
     }
 
+    public float getStars() {
+        return stars;
+    }
 }
