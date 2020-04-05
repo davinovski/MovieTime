@@ -1,18 +1,20 @@
 package mk.ukim.finki.seminarska.web;
 
-
 import mk.ukim.finki.seminarska.model.Comment;
-import mk.ukim.finki.seminarska.model.DTOs.MovieFilter;
 import mk.ukim.finki.seminarska.model.DTOs.RequestCreateMovie;
+import mk.ukim.finki.seminarska.model.Genre;
 import mk.ukim.finki.seminarska.model.Movie;
 import mk.ukim.finki.seminarska.model.Person;
 import mk.ukim.finki.seminarska.service.CommentService;
+import mk.ukim.finki.seminarska.service.GenreService;
 import mk.ukim.finki.seminarska.service.MovieService;
 import mk.ukim.finki.seminarska.service.PersonService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,11 +26,13 @@ public class MoviesApi {
     private final MovieService movieService;
     private final PersonService personService;
     private final CommentService commentService;
+    private final GenreService genreService;
 
-    public MoviesApi(MovieService movieService, PersonService personService, CommentService commentService) {
+    public MoviesApi(MovieService movieService, PersonService personService, CommentService commentService, GenreService genreService) {
         this.movieService = movieService;
         this.personService = personService;
         this.commentService = commentService;
+        this.genreService = genreService;
     }
 
     @PostMapping
@@ -41,24 +45,32 @@ public class MoviesApi {
         List<Person> writs=convertListIntegersToListElements(movieData.writers);
         List<Comment> comments=new ArrayList<>();
 
-        Movie movie=new Movie(movieData.title, movieData.yearOfRelease, movieData.description, movieData.rating, movieData.genres, dirs, starring, writs, comments, movieData.country, movieData.imageUrl, movieData.movieLength, movieData.videoUrl, movieData.detailsUrl,movieData.languages);
+        List<Genre> genres = new ArrayList<Genre>();
+        for (int genreId : movieData.genres){
+            genres.add(this.genreService.getGenre(genreId));
+        }
+
+        Movie movie=new Movie(movieData.title, movieData.yearOfRelease, movieData.description, movieData.rating, genres, dirs, starring, writs, comments, movieData.country, movieData.imageUrl, movieData.movieLength, movieData.videoUrl, movieData.detailsUrl,movieData.languages);
         return this.movieService.addMovie(movie);
     }
 
+
     @GetMapping
-    public List<Movie> getMovies(@RequestParam("pageNumber") int pageNumber,
-                                 @RequestParam("pageSize") int pageSize,
-                                 @RequestParam(required=false, defaultValue =" ") String[] genres,
-                                 @RequestParam(required=false, defaultValue="title") String orderBy){
-        List<String>gens=Arrays.asList(genres);
-        MovieFilter movieFilter=new MovieFilter(gens,pageSize,pageNumber);
-        return this.movieService.getAll(movieFilter, orderBy);
+    public Page<Movie> getMovies(@RequestParam("pageSize") int pageSize,
+                              @RequestParam("pageNumber") int pageNumber,
+                              @RequestParam(value = "orderBy", required = false, defaultValue = "title") String orderBy,
+                              @RequestParam(value = "searchTerm", required = false, defaultValue = "") String searchTerm,
+                              @RequestParam(value = "genres", required = false) List<Integer> genres
+                          ){
+        genres = ((genres == null) ? Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ,14) : genres);
+        return this.movieService.getAllMoviesByPage(genres, PageRequest.of(pageNumber-1,pageSize, orderBy.equals("title") ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending()));
     }
 
     @GetMapping("/{movieId}")
     public Movie getMovie(@PathVariable int movieId){
         return this.movieService.getMovie(movieId);
     }
+
 
 
     @PatchMapping("/{movieId}")
@@ -69,7 +81,13 @@ public class MoviesApi {
 
         List<Person> writs=convertListIntegersToListElements(movieData.writers);
         List<Comment> comments=this.movieService.getMovie(movieId).getComments();
-        return this.movieService.updateMovie(movieId, movieData.title, movieData.yearOfRelease, movieData.description, movieData.rating, movieData.genres,dirs, starring, writs, comments, movieData.country, movieData.imageUrl, movieData.movieLength, movieData.videoUrl, movieData.detailsUrl,movieData.languages);
+
+        List<Genre> genres = new ArrayList<Genre>();
+        for (int genreId : movieData.genres){
+            genres.add(this.genreService.getGenre(genreId));
+        }
+
+        return this.movieService.updateMovie(movieId, movieData.title, movieData.yearOfRelease, movieData.description, movieData.rating, genres, dirs, starring, writs, comments, movieData.country, movieData.imageUrl, movieData.movieLength, movieData.videoUrl, movieData.detailsUrl,movieData.languages);
     }
 
     @DeleteMapping("/{movieId}")

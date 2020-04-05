@@ -4,6 +4,9 @@ package mk.ukim.finki.seminarska.web;
 import mk.ukim.finki.seminarska.model.DTOs.PersonRequest;
 import mk.ukim.finki.seminarska.model.Person;
 import mk.ukim.finki.seminarska.service.PersonService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +23,19 @@ public class PersonApi {
         this.personService = personService;
     }
 
+
+    @GetMapping("/paged}")
+    public Page<Person> getAllByPage(@RequestParam("pageSize") int pageSize,
+                                     @RequestParam("pageNumber") int pageNumber){
+        return this.personService.getAllByPage(PageRequest.of(pageNumber-1,pageSize, Sort.by("name")));
+    }
+
     @GetMapping
     public List<Person> getAll(){
         return this.personService.getAll();
     }
+
+
 
     @GetMapping("/{personId}")
     public Person getPerson(@PathVariable int personId){
@@ -46,4 +58,12 @@ public class PersonApi {
     {
         return this.personService.updatePerson(personId,personRequest.name,personRequest.bio,personRequest.dateOfBirth,personRequest.placeOfBirth,personRequest.imageUrl);
     }
+
+    @DeleteMapping("/delete/{personId}")
+    public void deletePerson(@PathVariable int personId){
+        this.personService.deletePerson(personId);
+    }
+
+
+
 }

@@ -18,6 +18,6 @@ public class RequestCreateMovie {
     public List<Integer> writers;
     public List<Integer> directors;
     public List<Integer> stars;
-    public List<String> genres;
+    public List<Integer> genres;
     public float rating;
 }

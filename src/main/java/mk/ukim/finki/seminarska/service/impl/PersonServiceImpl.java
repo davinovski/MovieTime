@@ -6,6 +6,7 @@ import mk.ukim.finki.seminarska.repository.PersonRepository;
 import mk.ukim.finki.seminarska.service.PersonService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -35,6 +36,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public Page<Person> getAllByPage(Pageable pageable) {
+        return this.personRepository.findAll(pageable);
+    }
+
+    @Override
     public List<Person> getAll() {
         return this.personRepository.findAll();
     }
@@ -50,8 +56,4 @@ public class PersonServiceImpl implements PersonService {
         return this.personRepository.save(person);
     }
 
-    @Override
-    public Page<Person> getPeopleByPage(int page, int size){
-        return this.personRepository.findAll(PageRequest.of(page,size));
-    }
 }

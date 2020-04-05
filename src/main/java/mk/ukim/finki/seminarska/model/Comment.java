@@ -1,6 +1,8 @@
 package mk.ukim.finki.seminarska.model;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,7 +19,7 @@ public class Comment {
 
     private String content;
 
-    private LocalDateTime createdAd;
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="movie_id")
@@ -30,28 +32,7 @@ public class Comment {
         this.title=title;
         this.content = content;
         this.movieId=movieId;
-        this.createdAd = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
         this.stars=stars;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public LocalDateTime getCreatedAd() {
-        return createdAd;
-    }
-
-
-    public String getContent() {
-        return content;
-    }
-
-    public float getStars() {
-        return stars;
     }
 }

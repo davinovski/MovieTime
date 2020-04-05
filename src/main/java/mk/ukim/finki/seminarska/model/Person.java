@@ -1,5 +1,6 @@
 package mk.ukim.finki.seminarska.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
+@Getter
+@Setter
 @Entity
 public class Person {
     @Id
@@ -20,6 +24,19 @@ public class Person {
     private String placeOfBirth;
     private String imageUrl;
 
+    @ManyToMany(mappedBy = "directors", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Movie> moviesDirected;
+
+    @ManyToMany(mappedBy = "writers", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Movie> moviesWritten;
+
+    @ManyToMany(mappedBy = "stars", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Movie> moviesStarred;
+
+    
     public Person(String name, String bio, Date dateOfBirth, String placeOfBirth, String imageUrl) {
         this.name = name;
         this.bio = bio;
