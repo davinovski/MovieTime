@@ -63,7 +63,8 @@ public class MoviesApi {
                               @RequestParam(value = "genres", required = false) List<Integer> genres
                           ){
         genres = ((genres == null) ? Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ,14) : genres);
-        return this.movieService.getAllMoviesByPage(genres, PageRequest.of(pageNumber-1,pageSize, orderBy.equals("title") ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending()), searchTerm);
+        Page<Movie> movies = this.movieService.getAllMoviesByPage(genres, PageRequest.of(pageNumber-1,pageSize, orderBy.equals("title") ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending()), searchTerm);
+        return movies;
     }
 
     @GetMapping("/{movieId}")
