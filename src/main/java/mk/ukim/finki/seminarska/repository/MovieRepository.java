@@ -15,5 +15,7 @@ import java.util.List;
 public interface MovieRepository extends JpaRepository<Movie,Integer> {
     @Query("select distinct m from Movie m join m.genres g where g.id in :list")
     Page<Movie> getAllLists(List<Integer> list, Pageable pageable);
+    @Query("select distinct m from Movie m join m.genres g where g.id in :list and lower(m.title) like lower(concat('%',:searchTerm,'%'))")
+    Page<Movie> getAllMoviesPaged(List<Integer> list, Pageable pageable, String searchTerm);
 
 }

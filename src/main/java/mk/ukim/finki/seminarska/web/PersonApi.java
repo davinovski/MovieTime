@@ -24,7 +24,7 @@ public class PersonApi {
     }
 
 
-    @GetMapping("/paged}")
+    @GetMapping("/paged")
     public Page<Person> getAllByPage(@RequestParam("pageSize") int pageSize,
                                      @RequestParam("pageNumber") int pageNumber){
         return this.personService.getAllByPage(PageRequest.of(pageNumber-1,pageSize, Sort.by("name")));

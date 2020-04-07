@@ -70,8 +70,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Page<Movie> getAllMoviesByPage(List<Integer> genres, Pageable pageable) {
-        return this.movieRepository.getAllLists(genres, pageable);
+    public Page<Movie> getAllMoviesByPage(List<Integer> genres, Pageable pageable, String searchTerm) {
+        return this.movieRepository.getAllMoviesPaged(genres, pageable, searchTerm);
     }
 }
 
