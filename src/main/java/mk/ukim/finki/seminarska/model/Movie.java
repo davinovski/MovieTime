@@ -23,7 +23,7 @@ public class Movie {
     private String title;
     private int yearOfRelease;
     private String description;
-    private float rating;
+    private double rating;
     private String imageUrl;
     private String country;
     private int movieLength;
@@ -58,7 +58,7 @@ public class Movie {
         genres=new ArrayList<>();
     }
 
-    public Movie(String title, int yearOfRelease, String description, float rating, List<Genre> genres, List<Person> directors, List<Person> stars, List<Person> writers, List<Comment> comments, String country, String imageUrl, int movieLength, String videoUrl, String detailsUrl, List<String> languages) {
+    public Movie(String title, int yearOfRelease, String description, double rating, List<Genre> genres, List<Person> directors, List<Person> stars, List<Person> writers, List<Comment> comments, String country, String imageUrl, int movieLength, String videoUrl, String detailsUrl, List<String> languages) {
         this.title = title;
         this.yearOfRelease = yearOfRelease;
         this.description = description;
@@ -141,11 +141,11 @@ public class Movie {
         this.description = description;
     }
 
-    public float getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(float rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

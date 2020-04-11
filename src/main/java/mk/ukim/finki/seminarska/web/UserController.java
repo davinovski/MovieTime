@@ -3,6 +3,9 @@ package mk.ukim.finki.seminarska.web;
 import mk.ukim.finki.seminarska.model.ApplicationUser;
 import mk.ukim.finki.seminarska.repository.ApplicationUserRepository;
 import mk.ukim.finki.seminarska.service.impl.UserDetailsServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,4 +45,18 @@ public class UserController {
     {
         return applicationUserRepository.findByUsername(email) != null;
     }
+
+    @GetMapping("/paged")
+    public Page<ApplicationUser> getAllUsers(@RequestParam("pageSize") int pageSize,
+                                             @RequestParam("pageNumber") int pageNumber){
+        return userDetailsService.findAll(PageRequest.of(pageNumber,pageSize, Sort.by("lastName")));
+    }
+
+    @PostMapping("/{userId}/favourites/{movieId}")
+    public ApplicationUser addNewFavourite(@PathVariable("userId") long userId,
+                                           @PathVariable("movieId") int movieId){
+        ApplicationUser app = userDetailsService.AddFavourite(userId,movieId);
+        return app;
+    }
+
 }

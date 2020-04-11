@@ -22,6 +22,19 @@ public class Genre {
     @JsonIgnore
     private List<Movie> movies;
 
+    public Genre(String name, List<Movie> movies){
+        this.name=name;
+        this.movies=movies;
+    }
+    public Genre(){
 
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

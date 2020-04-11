@@ -21,7 +21,6 @@ public class GenresApi {
 
     @GetMapping
     public List<Genre> getGenres(){
-        List<Genre> genres = this.genreService.getAllGenres();
-       return genres;
+        return this.genreService.getAllGenres();
     }
 }

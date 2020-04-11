@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -55,24 +56,29 @@ public class MoviesApi {
     }
 
 
-    @GetMapping
+    @GetMapping("/paged")
     public Page<Movie> getMovies(@RequestParam("pageSize") int pageSize,
                               @RequestParam("pageNumber") int pageNumber,
                               @RequestParam(value = "orderBy", required = false, defaultValue = "title") String orderBy,
                               @RequestParam(value = "searchTerm", required = false, defaultValue = "") String searchTerm,
                               @RequestParam(value = "genres", required = false) List<Integer> genres
-                          ){
-        genres = ((genres == null) ? Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ,14) : genres);
-        Page<Movie> movies = this.movieService.getAllMoviesByPage(genres, PageRequest.of(pageNumber-1,pageSize, orderBy.equals("title") ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending()), searchTerm);
-        return movies;
+                          ) {
+        List<Genre> genreDatabase = this.genreService.getAllGenres();
+        List<Integer> genresOptions = new ArrayList<>();
+        genreDatabase.forEach(g -> genresOptions.add(g.getId()));
+        genres = ((genres == null) ? genresOptions : genres);
+        return this.movieService.getAllMoviesByPage(genres, PageRequest.of(pageNumber - 1, pageSize, orderBy.equals("title") ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending()), searchTerm);
+    }
+
+    @GetMapping("/all")
+    public List<Movie> getMovies() {
+       return movieService.getAll();
     }
 
     @GetMapping("/{movieId}")
     public Movie getMovie(@PathVariable int movieId){
         return this.movieService.getMovie(movieId);
     }
-
-
 
     @PatchMapping("/{movieId}")
     public Movie editMovie(@PathVariable int movieId, @RequestBody RequestCreateMovie movieData)
@@ -101,9 +107,10 @@ public class MoviesApi {
     public Comment addComment(@PathVariable("movieId") int movieId,
                               @RequestParam("title") String title,
                               @RequestParam("content") String content,
-                              @RequestParam("stars") float stars)
+                              @RequestParam("stars") float stars,
+                              @RequestParam("email") String email)
     {
-        return this.commentService.addComment(title,content, movieId, stars);
+        return this.commentService.addComment(title,content, movieId, stars, email);
     }
 
     @GetMapping("/{movieId}/comments")

@@ -15,6 +15,6 @@ public interface MovieService {
     List<Movie> getAll();
     Movie getMovie(int movieId);
     void deleteMovie(int movieId);
-    Movie updateMovie(int movieId, String title, int yearOfRelease, String description, float rating, List<Genre> genres, List<Person> dirs, List<Person>starring, List<Person> movieWriters, List<Comment> comments, String country, String imageUrl, int runtime, String videoUrl, String DetailsUrl, List<String>languages);
+    Movie updateMovie(int movieId, String title, int yearOfRelease, String description, double rating, List<Genre> genres, List<Person> dirs, List<Person>starring, List<Person> movieWriters, List<Comment> comments, String country, String imageUrl, int runtime, String videoUrl, String DetailsUrl, List<String>languages);
     Page<Movie> getAllMoviesByPage(List<Integer> genres, Pageable pageable, String searchTerm);
 }

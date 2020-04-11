@@ -6,7 +6,7 @@ import mk.ukim.finki.seminarska.model.Movie;
 import java.util.List;
 
 public interface CommentService {
-    Comment addComment(String title,String content, int movieId, float stars);
+    Comment addComment(String title,String content, int movieId, double stars, String email);
     void deleteComment(int commentId);
     List<Comment> getComments(int movieId);
 }
