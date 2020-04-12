@@ -98,7 +98,7 @@ public class MoviesApi {
         return this.movieService.updateMovie(movieId, movieData.title, movieData.yearOfRelease, movieData.description, movieData.rating, genres, dirs, starring, writs, comments, movieData.country, movieData.imageUrl, movieData.movieLength, movieData.videoUrl, movieData.detailsUrl,movieData.languages);
     }
 
-    @DeleteMapping("/{movieId}/delete")
+    @PostMapping("/{movieId}/delete")
     public void deleteMovie(@PathVariable int movieId){
         this.movieService.deleteMovie(movieId);
     }
