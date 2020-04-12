@@ -24,15 +24,15 @@ public class Person {
     private String placeOfBirth;
     private String imageUrl;
 
-    @ManyToMany(mappedBy = "directors", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "directors", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Movie> moviesDirected;
 
-    @ManyToMany(mappedBy = "writers", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "writers", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Movie> moviesWritten;
 
-    @ManyToMany(mappedBy = "stars", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "stars", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Movie> moviesStarred;
 

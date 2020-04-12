@@ -18,7 +18,7 @@ public class Genre {
 
     private String name;
 
-    @ManyToMany(mappedBy = "genres", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "genres", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Movie> movies;
 

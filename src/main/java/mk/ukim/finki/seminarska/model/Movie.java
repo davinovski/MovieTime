@@ -28,7 +28,7 @@ public class Movie {
     private String country;
     private int movieLength;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Genre> genres;
 
     @ElementCollection(targetClass=String.class)

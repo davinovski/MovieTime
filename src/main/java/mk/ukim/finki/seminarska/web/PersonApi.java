@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
-@RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@RestController
 @RequestMapping(path="/api/cast")
 public class PersonApi {
     private final PersonService personService;
@@ -50,7 +50,7 @@ public class PersonApi {
         return this.personService.addPerson(person);
     }
 
-    @PutMapping("/{personId}")
+    @PatchMapping("/edit/{personId}")
     public Person updatePerson(
             @PathVariable("personId") int personId,
             @RequestBody PersonRequest personRequest)
@@ -59,7 +59,7 @@ public class PersonApi {
         return this.personService.updatePerson(personId,personRequest.name,personRequest.bio,personRequest.dateOfBirth,personRequest.placeOfBirth,personRequest.imageUrl);
     }
 
-    @DeleteMapping("/delete/{personId}")
+    @PostMapping("/delete/{personId}")
     public void deletePerson(@PathVariable int personId){
         this.personService.deletePerson(personId);
     }

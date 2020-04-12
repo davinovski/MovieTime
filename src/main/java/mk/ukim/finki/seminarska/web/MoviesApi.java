@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-@RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@RestController
 @RequestMapping(path="/api/movies")
 public class MoviesApi {
     private final MovieService movieService;
@@ -67,7 +67,8 @@ public class MoviesApi {
         List<Integer> genresOptions = new ArrayList<>();
         genreDatabase.forEach(g -> genresOptions.add(g.getId()));
         genres = ((genres == null) ? genresOptions : genres);
-        return this.movieService.getAllMoviesByPage(genres, PageRequest.of(pageNumber - 1, pageSize, orderBy.equals("title") ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending()), searchTerm);
+        Page<Movie> Movies = this.movieService.getAllMoviesByPage(genres, PageRequest.of(pageNumber - 1, pageSize, orderBy.equals("title") ? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending()), searchTerm);
+        return Movies;
     }
 
     @GetMapping("/all")
@@ -80,7 +81,7 @@ public class MoviesApi {
         return this.movieService.getMovie(movieId);
     }
 
-    @PatchMapping("/{movieId}")
+    @PatchMapping("{movieId}/edit")
     public Movie editMovie(@PathVariable int movieId, @RequestBody RequestCreateMovie movieData)
     {
         List<Person> dirs=convertListIntegersToListElements(movieData.directors);
@@ -97,7 +98,7 @@ public class MoviesApi {
         return this.movieService.updateMovie(movieId, movieData.title, movieData.yearOfRelease, movieData.description, movieData.rating, genres, dirs, starring, writs, comments, movieData.country, movieData.imageUrl, movieData.movieLength, movieData.videoUrl, movieData.detailsUrl,movieData.languages);
     }
 
-    @DeleteMapping("/{movieId}")
+    @DeleteMapping("/{movieId}/delete")
     public void deleteMovie(@PathVariable int movieId){
         this.movieService.deleteMovie(movieId);
     }
