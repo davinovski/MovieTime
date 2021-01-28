@@ -11,6 +11,7 @@ import mk.ukim.finki.seminarska.repository.MovieRepository;
 import mk.ukim.finki.seminarska.service.CommentService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -39,6 +40,7 @@ public class CommentServiceImpl implements CommentService {
         this.commentRepository.deleteById(commentId);
     }
 
+    @Transactional
     @Override
     public List<Comment> getComments(int movieId) {
         Movie movie=this.movieRepository.findById(movieId).orElseThrow(InvalidMovieIdException::new);

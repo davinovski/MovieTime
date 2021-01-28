@@ -1,6 +1,7 @@
 package mk.ukim.finki.seminarska.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import mk.ukim.finki.seminarska.model.DTOs.MostWatchedMovie;
 
 import javax.persistence.*;
 import java.util.List;
@@ -21,8 +22,24 @@ public class ApplicationUser {
             cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private UserDetails userDetails;
+
+    //private boolean deactivated;
+
+    /*@JsonIgnore
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private List<Movie> watchedMovies;*/
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    List<MostWatchedMovie> watched;
+
     @ElementCollection(targetClass=Integer.class)
     private List<Integer> favoritesIds;
+
+
 
     public long getId() {
         return id;
@@ -83,4 +100,21 @@ public class ApplicationUser {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
+
+    public List<MostWatchedMovie> getWatched() {
+        return watched;
+    }
+
+    public void setWatched(List<MostWatchedMovie> watched) {
+        this.watched = watched;
+    }
+
+    public UserDetails getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(UserDetails userDetails) {
+        this.userDetails = userDetails;
+    }
+
 }

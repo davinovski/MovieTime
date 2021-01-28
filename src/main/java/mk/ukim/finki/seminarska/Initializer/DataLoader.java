@@ -45,6 +45,7 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
         if ((movieRepository.findAll().isEmpty())) {
             Genre Action = new Genre("Action", Collections.emptyList());
             genres.add(Action);

@@ -1,7 +1,9 @@
 package mk.ukim.finki.seminarska.service.impl;
 
 import mk.ukim.finki.seminarska.model.Comment;
+import mk.ukim.finki.seminarska.model.DTOs.MostWatchedMovie;
 import mk.ukim.finki.seminarska.model.DTOs.MovieFilter;
+import mk.ukim.finki.seminarska.model.DTOs.MoviePerPerson;
 import mk.ukim.finki.seminarska.model.Genre;
 import mk.ukim.finki.seminarska.model.Movie;
 import mk.ukim.finki.seminarska.model.Person;
@@ -16,7 +18,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.*;
-import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +74,23 @@ public class MovieServiceImpl implements MovieService {
     public Page<Movie> getAllMoviesByPage(List<Integer> genres, Pageable pageable, String searchTerm) {
         return this.movieRepository.getAllMoviesPaged(genres, pageable, searchTerm);
     }
+
+    @Override
+    public List<MoviePerPerson> getAllMoviesStarred(int id) {
+        return this.movieRepository.getAllStarredMovies(id);
+    }
+
+    @Override
+    public List<MoviePerPerson> getAllMoviesDirected(int id) {
+        return this.movieRepository.getAllDirectedMovies(id);
+    }
+
+    @Override
+    public List<MoviePerPerson> getAllMoviesWritten(int id) {
+        return this.movieRepository.getAllWrittenMovies(id);
+    }
+
+
+
+
 }
-
-

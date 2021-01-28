@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mk.ukim.finki.seminarska.model.DTOs.MostWatchedMovie;
 import mk.ukim.finki.seminarska.model.DTOs.MovieFilter;
 import org.thymeleaf.expression.Sets;
 
@@ -34,6 +35,10 @@ public class Movie {
     @ElementCollection(targetClass=String.class)
     private List<String> languages;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "movie")
+    private List<MostWatchedMovie> mostWatched;
+
     @ManyToMany
     private List<Person> directors;
 
@@ -43,6 +48,7 @@ public class Movie {
     @ManyToMany
     private List<Person> writers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "movieId", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private List<Comment> comments;
@@ -201,5 +207,12 @@ public class Movie {
         this.languages = languages;
     }
 
+    public List<MostWatchedMovie> getMostWatched() {
+        return mostWatched;
+    }
+
+    public void setMostWatched(List<MostWatchedMovie> mostWatched) {
+        this.mostWatched = mostWatched;
+    }
 }
 
