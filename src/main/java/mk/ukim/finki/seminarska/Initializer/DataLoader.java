@@ -98,8 +98,8 @@ public class DataLoader implements ApplicationRunner {
             admin.setAdmin(true);
             admin.setUsername("admin@admin.com");
             admin.setPassword(bCryptPasswordEncoder.encode("12345"));
-            admin.setFirstName("Admin");
-            admin.setLastName("Admin");
+            admin.getUserDetails().setFirstName("Admin");
+            admin.getUserDetails().setLastName("Admin");
             admin.setComments(new ArrayList<>());
             users.add(admin);
 
@@ -107,8 +107,8 @@ public class DataLoader implements ApplicationRunner {
             user.setAdmin(false);
             user.setUsername("user@user.com");
             user.setPassword(bCryptPasswordEncoder.encode("12345"));
-            user.setFirstName("User");
-            user.setLastName("User");
+            user.getUserDetails().setFirstName("User");
+            user.getUserDetails().setLastName("User");
             user.setComments(new ArrayList<>());
             users.add(user);
 

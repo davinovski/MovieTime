@@ -2,6 +2,7 @@ package mk.ukim.finki.seminarska.service.impl;
 
 import mk.ukim.finki.seminarska.model.ApplicationUser;
 import mk.ukim.finki.seminarska.model.DTOs.UserDTO;
+import mk.ukim.finki.seminarska.model.DTOs.UserInTable;
 import mk.ukim.finki.seminarska.model.exceptions.InvalidUserIdException;
 import mk.ukim.finki.seminarska.model.exceptions.InvalidUsernameException;
 import mk.ukim.finki.seminarska.repository.ApplicationUserRepository;
@@ -82,8 +83,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return this.applicationUserRepository.save(user);
     }
 
-    public Page<ApplicationUser> findAll(Pageable pageable){
-        return applicationUserRepository.findAll(pageable);
+    public Page<UserInTable> findAll(Pageable pageable, String searchTerm){
+        return applicationUserRepository.getAllUsers(pageable, searchTerm);
     }
 
     public mk.ukim.finki.seminarska.model.UserDetails changeUserDetails(String username, String firstName, String lastName, String description){
@@ -125,6 +126,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return user.getWatched().stream().anyMatch(m -> m.getId().getMovieId() == movieId);
     }
 
+    /*public Page<UserInTable> getAllUsers(Pageable pageable, String searchTerm){
+        return this.applicationUserRepository.getAllUsers(pageable, searchTerm);
+    }
+     */
+
+    public ApplicationUser promoteUser(long id){
+        ApplicationUser user = this.applicationUserRepository.findById(id).orElseThrow(InvalidUserIdException::new);
+        user.setAdmin(true);
+        return this.applicationUserRepository.save(user);
+
+    }
 
 
 }

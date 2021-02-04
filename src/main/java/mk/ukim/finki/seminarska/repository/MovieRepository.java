@@ -3,6 +3,7 @@ package mk.ukim.finki.seminarska.repository;
 import mk.ukim.finki.seminarska.model.DTOs.CardMovie;
 import mk.ukim.finki.seminarska.model.DTOs.MostWatchedMovie;
 import mk.ukim.finki.seminarska.model.DTOs.MoviePerPerson;
+import mk.ukim.finki.seminarska.model.DTOs.SuggestionMovie;
 import mk.ukim.finki.seminarska.model.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,5 +30,9 @@ public interface MovieRepository extends JpaRepository<Movie,Integer> {
     @Query("select distinct m FROM Movie m where m.id in :list")
     Page<Movie> getAllFavoriteMovies(List<Integer> list, Pageable pageable);
     @Query("select distinct m FROM Movie m where m.id in :list")
-    Page<Movie> getAllWatchedMovies(List<Integer> list, Pageable pageable);
+    List<Movie> getAllMoviesByIds(List<Integer> list);
+    @Query("select new mk.ukim.finki.seminarska.model.DTOs.SuggestionMovie(m.id, m.title, count(g.name))"
+            + "FROM Movie m join m.genres g where g.id in :genreList and m.id != :movieId GROUP BY m.id, m.title order by count(g.name) desc")
+    List<SuggestionMovie> getSuggestedMovies(List<Integer> genreList, int movieId);
+
 }

@@ -1,9 +1,7 @@
 package mk.ukim.finki.seminarska.service.impl;
 
 import mk.ukim.finki.seminarska.model.Comment;
-import mk.ukim.finki.seminarska.model.DTOs.MostWatchedMovie;
-import mk.ukim.finki.seminarska.model.DTOs.MovieFilter;
-import mk.ukim.finki.seminarska.model.DTOs.MoviePerPerson;
+import mk.ukim.finki.seminarska.model.DTOs.*;
 import mk.ukim.finki.seminarska.model.Genre;
 import mk.ukim.finki.seminarska.model.Movie;
 import mk.ukim.finki.seminarska.model.Person;
@@ -19,7 +17,10 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -90,7 +91,25 @@ public class MovieServiceImpl implements MovieService {
         return this.movieRepository.getAllWrittenMovies(id);
     }
 
+    @Override
+    public List<SuggestionMovie> getSuggestedMovies(int movieId) {
+        Movie currentMovie = this.getMovie(movieId);
+        List<Integer> starsList = currentMovie.getStars().stream().map(Person::getId).collect(Collectors.toList());
+        List<Integer> genreList = currentMovie.getGenres().stream().map(Genre::getId).collect(Collectors.toList());
+        List<SuggestionMovie> moviesSuggested = this.movieRepository.getSuggestedMovies(genreList, movieId);
+        List<Movie> top30Movies = this.getSpecificMovies(moviesSuggested.stream().map(SuggestionMovie::getId).collect(Collectors.toList()));
+        List<MovieStars> stars = new ArrayList<>();
+        top30Movies.forEach(m -> stars.add(new MovieStars(m.getId(), m.getStars().stream().map(Person::getId).collect(Collectors.toList()))));
+        stars.forEach(m -> m.getStars().retainAll(starsList));
+        moviesSuggested.forEach(m -> m.setSameProps(m.getSameProps() + stars.stream().filter(s -> s.getId() == m.getId()).findFirst().get().getStars().size()));
+        Collections.sort(moviesSuggested);
+        return moviesSuggested;
+    }
 
+    @Override
+    public List<Movie> getSpecificMovies(List<Integer> moviesIds) {
+        return this.movieRepository.getAllMoviesByIds(moviesIds);
+    }
 
 
 }

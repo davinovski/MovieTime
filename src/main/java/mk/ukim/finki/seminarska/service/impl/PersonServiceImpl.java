@@ -36,8 +36,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Page<Person> getAllByPage(Pageable pageable) {
-        return this.personRepository.findAll(pageable);
+    public Page<Person> getAllByPage(Pageable pageable, String searchTerm) {
+        return this.personRepository.peopleByTerm(pageable, searchTerm);
     }
 
     @Override

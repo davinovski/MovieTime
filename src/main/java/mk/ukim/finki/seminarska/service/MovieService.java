@@ -4,6 +4,7 @@ import mk.ukim.finki.seminarska.model.Comment;
 import mk.ukim.finki.seminarska.model.DTOs.MostWatchedMovie;
 import mk.ukim.finki.seminarska.model.DTOs.MovieFilter;
 import mk.ukim.finki.seminarska.model.DTOs.MoviePerPerson;
+import mk.ukim.finki.seminarska.model.DTOs.SuggestionMovie;
 import mk.ukim.finki.seminarska.model.Genre;
 import mk.ukim.finki.seminarska.model.Movie;
 import mk.ukim.finki.seminarska.model.Person;
@@ -22,7 +23,6 @@ public interface MovieService {
     List<MoviePerPerson> getAllMoviesStarred(int id);
     List<MoviePerPerson> getAllMoviesDirected(int id);
     List<MoviePerPerson> getAllMoviesWritten(int id);
-
-
-
+    List<SuggestionMovie> getSuggestedMovies(int movieId);
+    List<Movie> getSpecificMovies (List<Integer> moviesIds);
 }

@@ -14,8 +14,6 @@ public class ApplicationUser {
     private String username;
     private String password;
     private boolean admin;
-    private String firstName;
-    private String lastName;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
@@ -77,21 +75,6 @@ public class ApplicationUser {
         this.favoritesIds = favoritesIds;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
 
     public List<Comment> getComments() {
         return comments;

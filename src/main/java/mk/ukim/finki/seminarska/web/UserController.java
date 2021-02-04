@@ -2,8 +2,10 @@ package mk.ukim.finki.seminarska.web;
 
 import mk.ukim.finki.seminarska.model.ApplicationUser;
 import mk.ukim.finki.seminarska.model.DTOs.UserDTO;
+import mk.ukim.finki.seminarska.model.DTOs.UserInTable;
 import mk.ukim.finki.seminarska.model.Movie;
 import mk.ukim.finki.seminarska.model.UserDetails;
+import mk.ukim.finki.seminarska.model.exceptions.NotEnoughPermissions;
 import mk.ukim.finki.seminarska.repository.ApplicationUserRepository;
 import mk.ukim.finki.seminarska.service.MovieUserService;
 import mk.ukim.finki.seminarska.service.impl.UserDetailsServiceImpl;
@@ -68,9 +70,10 @@ public class UserController {
     }
 
     @GetMapping("/paged")
-    public Page<ApplicationUser> getAllUsers(@RequestParam("pageSize") int pageSize,
-                                             @RequestParam("pageNumber") int pageNumber){
-        return userDetailsService.findAll(PageRequest.of(pageNumber,pageSize, Sort.by("lastName")));
+    public Page<UserInTable> getAllUsers(@RequestParam("pageSize") int pageSize,
+                                         @RequestParam("pageNumber") int pageNumber,
+                                         @RequestParam(value = "searchTerm", required = false, defaultValue = "") String searchTerm){
+        return userDetailsService.findAll(PageRequest.of(pageNumber-1,pageSize, Sort.by("username")), searchTerm);
     }
 
     @PostMapping("/{userId}/favourites/{movieId}")
@@ -99,10 +102,17 @@ public class UserController {
     public boolean isWatched(@AuthenticationPrincipal String username, @PathVariable int movieId){
         return this.userDetailsService.isMovieWatched(username, movieId);
     }
+    @GetMapping("/isAdmin")
+    public boolean isAdmin(@AuthenticationPrincipal String username) {
+        return userDetailsService.loadUser(username).isAdmin();
+    }
 
-
-
-
-
-
+    @PostMapping("/{userId}/promote")
+    public ApplicationUser promoteUser(@AuthenticationPrincipal String username,
+                               @PathVariable long userId) {
+        if(this.isAdmin(username)){
+            return this.userDetailsService.promoteUser(userId);
+        }
+        else throw new NotEnoughPermissions();
+    }
 }

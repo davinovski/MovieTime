@@ -4,6 +4,7 @@ import mk.ukim.finki.seminarska.model.*;
 import mk.ukim.finki.seminarska.model.DTOs.CardMovie;
 import mk.ukim.finki.seminarska.model.DTOs.MoviePerPerson;
 import mk.ukim.finki.seminarska.model.DTOs.RequestCreateMovie;
+import mk.ukim.finki.seminarska.model.DTOs.SuggestionMovie;
 import mk.ukim.finki.seminarska.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -172,6 +173,8 @@ public class MoviesApi {
         return this.movieService.getAllMoviesStarred(personId);
     }
 
-
-
+    @GetMapping("/{movieId}/suggestions")
+    public List<SuggestionMovie> getAllSuggestionMovies(@PathVariable int movieId){
+        return this.movieService.getSuggestedMovies(movieId);
+    }
 }
